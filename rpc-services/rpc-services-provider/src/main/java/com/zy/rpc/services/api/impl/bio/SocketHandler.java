@@ -13,6 +13,7 @@ import java.net.Socket;
  * @AUTHOR zhangy
  * 2020-03-31  20:02
  */
+@SuppressWarnings("all")
 public class SocketHandler implements Runnable {
 
     private final Socket socket;
@@ -23,6 +24,7 @@ public class SocketHandler implements Runnable {
         this.userService = objectService;
     }
 
+    @Override
     public void run() {
         ObjectInputStream objectInputStream = null;
         ObjectOutputStream objectOutputStream = null;
