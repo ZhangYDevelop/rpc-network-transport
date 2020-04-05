@@ -3,6 +3,9 @@ package com.zy.rpc.client;
 import com.zy.rpc.api.BaseRestlt;
 import com.zy.rpc.api.ISayHello;
 
+import java.io.IOException;
+import java.net.Socket;
+
 /**
  * @AUTHOR zhangy
  * 2020-03-31  20:13
@@ -14,6 +17,5 @@ public class SocketClientApp {
         ISayHello iSayHello = rpcClientProxy.proxy(ISayHello.class, "localhost", 8080);
         BaseRestlt baseRestlt =  iSayHello.sayHello("hello");
         System.out.println(baseRestlt.toString());
-
     }
 }
