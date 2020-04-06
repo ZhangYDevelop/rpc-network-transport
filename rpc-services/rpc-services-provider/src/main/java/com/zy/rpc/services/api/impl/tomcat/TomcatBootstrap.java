@@ -3,6 +3,7 @@ package com.zy.rpc.services.api.impl.tomcat;
 import com.zy.rpc.services.api.impl.tomcat.http.AbstracTomcatHttp;
 import com.zy.rpc.services.api.impl.tomcat.http.TomcatRequest;
 import com.zy.rpc.services.api.impl.tomcat.http.TomcatRespose;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -101,16 +102,9 @@ public class TomcatBootstrap {
             TomcatRequest tomcatRequest = new TomcatRequest(is);
             TomcatRespose tomcatRespose = new TomcatRespose(os);
 
-            byte[] buffer = new byte[1024];
+            String url =  tomcatRequest.getUrl();
 
-            int len = 0;
-
-            if ((len = is.read(buffer)) > 0) {
-                String content = new String(buffer, 0, len);
-                System.out.println(content);
-
-                String url =  tomcatRequest.getUrl();
-
+            if (!StringUtils.isEmpty(url)) {
                 tomcatHttpMap.get(url).service(tomcatRequest, tomcatRespose);
             } else {
                 os = socket.getOutputStream();
