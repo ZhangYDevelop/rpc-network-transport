@@ -79,18 +79,19 @@ public class NettyRegistryHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         InvokeProcotol invokeProcotol = (InvokeProcotol)msg;
-        BaseResult baseResult = new BaseResult();
         Object result ;
         if (serviceInstance.containsKey(invokeProcotol.getClassName())) {
             Object service = serviceInstance.get(invokeProcotol.getClassName());
             Method method = service.getClass().getMethod(invokeProcotol.getMethodName(), invokeProcotol.getParams());
             result = method.invoke(service, invokeProcotol.getValues());
-            baseResult.setSuccess(true);
-            baseResult.setResultData(result);
-            baseResult.setMeaaage("服务调用成功");
+            ctx.writeAndFlush(result);
+            ctx.close(); // ctx 处理完需要关闭，客户端才会收到数据
         } else {
+            BaseResult baseResult = new BaseResult();
             baseResult.setSuccess(false);
             baseResult.setMeaaage("服务调用失败");
+            ctx.writeAndFlush(baseResult);
+            ctx.close(); // ctx 处理完需要关闭，客户端才会收到数据
         }
     }
 

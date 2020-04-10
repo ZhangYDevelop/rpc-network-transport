@@ -31,10 +31,13 @@ public class NettyRegistry {
     }
 
     private void start() {
-        try {
-            EventLoopGroup boosGroup = new NioEventLoopGroup();
+        EventLoopGroup boosGroup = null;
+        EventLoopGroup workGroup = null;
 
-            EventLoopGroup workGroup = new NioEventLoopGroup();
+        try {
+           boosGroup = new NioEventLoopGroup();
+
+           workGroup = new NioEventLoopGroup();
 
             ServerBootstrap serverBootstrap = new ServerBootstrap();
 
@@ -43,10 +46,10 @@ public class NettyRegistry {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline cp = socketChannel.pipeline();
-                            cp.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4));
+                            cp.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0,4));
                             cp.addLast(new LengthFieldPrepender(4));
-                            cp.addLast("decoder", new ObjectEncoder());
-                            cp.addLast("encoder", new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.cacheDisabled(null)));
+                            cp.addLast("encoder", new ObjectEncoder());
+                            cp.addLast("decoder", new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.cacheDisabled(null)));
                             cp.addLast(new NettyRegistryHandler());
                         }
                     })
@@ -58,6 +61,9 @@ public class NettyRegistry {
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            boosGroup.shutdownGracefully();
+            workGroup.shutdownGracefully();
         }
     }
 }

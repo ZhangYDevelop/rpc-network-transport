@@ -24,7 +24,7 @@ import java.lang.reflect.Proxy;
 public class NettyProxy {
 
 
-    public static <T> T createProxy(Class<?> clazz, int port, String  host) {
+    public static <T> T createProxy(Class<?> clazz, int port, String host) {
 
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new NettyInvokeHandler(port, host));
 
@@ -67,10 +67,11 @@ public class NettyProxy {
                             @Override
                             protected void initChannel(SocketChannel socketChannel) throws Exception {
                                 ChannelPipeline cp = socketChannel.pipeline();
-                                cp.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4));
+                                cp.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
                                 cp.addLast(new LengthFieldPrepender(4));
-                                cp.addLast("decoder", new ObjectEncoder());
-                                cp.addLast("encoder", new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.cacheDisabled(null)));
+                                cp.addLast("encoder", new ObjectEncoder());
+                                cp.addLast("decoder", new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.cacheDisabled(null)));
+
                                 cp.addLast(clientHandler);
                             }
                         });
@@ -85,7 +86,7 @@ public class NettyProxy {
             } finally {
                 group.shutdownGracefully();
             }
-            return  null;
+            return null;
         }
 
 

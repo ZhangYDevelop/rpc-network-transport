@@ -37,4 +37,13 @@ public class BaseResult implements Serializable {
     public void setMeaaage(String meaaage) {
         Meaaage = meaaage;
     }
+
+    @Override
+    public String toString() {
+        return "BaseResult{" +
+                "success=" + success +
+                ", resultData=" + resultData +
+                ", Meaaage='" + Meaaage + '\'' +
+                '}';
+    }
 }

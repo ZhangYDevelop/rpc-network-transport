@@ -10,6 +10,10 @@ import com.zy.rpc.netty.common.BaseResult;
 public class IHelloServiceImpl implements IHelloService {
 
     public BaseResult sayHello(String message) {
-        return null;
+        BaseResult baseResult = new BaseResult();
+        baseResult.setSuccess(true);
+        baseResult.setMeaaage("服务端收到消息");
+        baseResult.setResultData("服务端返回消息");
+        return  baseResult;
     }
 }
