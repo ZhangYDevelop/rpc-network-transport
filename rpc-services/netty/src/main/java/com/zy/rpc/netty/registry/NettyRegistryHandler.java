@@ -1,5 +1,6 @@
-package com.zy.rpc.netty.common;
+package com.zy.rpc.netty.registry;
 
+import com.zy.rpc.netty.common.BaseResult;
 import com.zy.rpc.netty.protocol.InvokeProcotol;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

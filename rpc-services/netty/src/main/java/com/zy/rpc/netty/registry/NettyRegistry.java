@@ -1,6 +1,5 @@
 package com.zy.rpc.netty.registry;
 
-import com.zy.rpc.netty.common.NettyRegistryHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
